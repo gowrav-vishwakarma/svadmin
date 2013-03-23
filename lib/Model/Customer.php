@@ -10,5 +10,6 @@ class Model_Customer extends Model_Table {
 		$this->addField('City');
 
 		$this->hasMany('Distributor','customer_id');
+		$this->hasMany('Sale','customer_id',null,'Purchases');
 	}
 }

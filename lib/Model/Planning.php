@@ -15,6 +15,16 @@ class Model_Planning extends Model_Table {
 		$this->hasMany('Plots_DirectSold','planning_id',null,'DirectSold_Plots');
 		$this->hasMany('Plots_EMISold','planning_id',null,'EMISold_Plots');
 
+		$this->addExpression('total_plots')->set(function($m,$q){
+			return $m->refSQL('Plots')->count();
+		});
+
+		$this->addExpression('sold_plots')->set(function($m,$q){
+			return $m->refSQL('Sold_Plots')->count();
+		});
+
+		
+
 		$this->addHook('beforeDelete',$this);
 	}
 
@@ -26,5 +36,3 @@ class Model_Planning extends Model_Table {
 	}
 } 
 
-
-class Model_Plannings extends Model_planning {}

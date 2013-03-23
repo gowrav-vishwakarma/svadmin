@@ -5,6 +5,8 @@ class Model_Plot extends Model_Table {
 	
 	function init(){
 		parent::init();
+		$this->hasOne("Planning",'planning_id',null,'planning');
+		$this->hasOne("SalesPolicy",'salespolicy_id')->mandatory('This is a Required field');
 
 		$this->addField('name')->mandatory('Plot Number is must')->caption('Plot Number');
 		$this->addField('block_number')->mandatory('Plot Block Number is must');
@@ -16,7 +18,7 @@ class Model_Plot extends Model_Table {
 		$this->addField('is_corner')->type('boolean');
 		$this->addField('date')->defaultValue(date('Y-m-d'))->type('date');
 		$this->addField('status')->enum(array('Available','DirectSold','EMISold','AvailableReSale'))->defaultValue('Available')->system(false); //TODO system true
-		$this->hasOne("Planning",'planning_id',null,'planning');
+		$this->hasMany('Sale','plot_id');
 
 		$this->addHook('beforeSave',$this);
 
