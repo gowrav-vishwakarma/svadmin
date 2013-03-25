@@ -1,5 +1,7 @@
 <?php
 
+define('SALE','Sale');
+
 $config['atk']['base_path']='./atk4/';
 $config['dsn']='mysql://root:winserver@localhost/sv';
 

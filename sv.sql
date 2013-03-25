@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.10.1deb1
+-- version 3.4.5deb1
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 23, 2013 at 11:39 AM
--- Server version: 5.5.28
--- PHP Version: 5.3.10-1ubuntu3.5
+-- Generation Time: Mar 24, 2013 at 04:30 PM
+-- Server version: 5.1.61
+-- PHP Version: 5.3.6-13ubuntu3.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -251,7 +251,16 @@ CREATE TABLE IF NOT EXISTS `xcustomer` (
   `Address` varchar(255) NOT NULL,
   `City` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `xcustomer`
+--
+
+INSERT INTO `xcustomer` (`id`, `name`, `Address`, `City`) VALUES
+(1, 'gowrav', 'udaipur', 'udaipur'),
+(2, 'priti ', 'udaipur', 'udaipur'),
+(3, 'ravi', 'udaipur', 'udaipur');
 
 -- --------------------------------------------------------
 
@@ -299,14 +308,15 @@ CREATE TABLE IF NOT EXISTS `xplannings` (
   `Phase` varchar(100) NOT NULL,
   `is_private` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Dumping data for table `xplannings`
 --
 
 INSERT INTO `xplannings` (`id`, `name`, `Phase`, `is_private`) VALUES
-(1, 'Planning one', '-', 1);
+(1, 'Planning one', '-', 1),
+(3, 'Plannig 2', '-', 0);
 
 -- --------------------------------------------------------
 
@@ -327,17 +337,19 @@ CREATE TABLE IF NOT EXISTS `xplots` (
   `is_corner` tinyint(4) NOT NULL,
   `Unit` varchar(255) NOT NULL,
   `date` datetime NOT NULL,
+  `salespolicy_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `xplots`
 --
 
-INSERT INTO `xplots` (`id`, `name`, `planning_id`, `width`, `height`, `Area`, `status`, `block_number`, `SqAreaCost`, `is_corner`, `Unit`, `date`) VALUES
-(1, '1', 1, 60, 40, 2400, 'DirectSold', 'q', 1000, 0, 'q', '0000-00-00 00:00:00'),
-(2, 'B', 1, 76, 67, 678, 'Available', 'B', 2000, 0, 'yard', '2013-03-17 00:00:00'),
-(3, 'C', 1, 65, 56, 65, 'Available', 'C', 2500, 0, 'yard', '2013-03-16 00:00:00');
+INSERT INTO `xplots` (`id`, `name`, `planning_id`, `width`, `height`, `Area`, `status`, `block_number`, `SqAreaCost`, `is_corner`, `Unit`, `date`, `salespolicy_id`) VALUES
+(1, '1', 1, 60, 40, 2400, 'DirectSold', 'q', 1000, 0, 'q', '1970-01-01 00:00:00', 1),
+(2, 'B', 1, 76, 67, 678, 'Available', 'B', 2000, 0, 'yard', '2013-03-17 00:00:00', 0),
+(3, 'C', 1, 65, 56, 65, 'Available', 'C', 2500, 0, 'yard', '2013-03-16 00:00:00', 0),
+(5, 'Planning 1 PLot A', 3, 60, 40, 2400, 'Available', 'A', 100, 1, 'sqft', '2013-03-23 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -350,8 +362,24 @@ CREATE TABLE IF NOT EXISTS `xsales` (
   `plot_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `RatePerSqUnit` int(11) NOT NULL,
+  `salespolicy_name` varchar(255) NOT NULL,
+  `down_payment` int(11) NOT NULL,
+  `total_cost` int(11) NOT NULL,
+  `emi_pattern` text NOT NULL,
+  `emi_mode` varchar(10) NOT NULL,
+  `master_emi` int(11) NOT NULL,
+  `master_emi_mode` varchar(255) NOT NULL,
+  `direct_commission_to_agent` varchar(255) NOT NULL,
+  `emi_commission_to_agent` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+
+--
+-- Dumping data for table `xsales`
+--
+
+INSERT INTO `xsales` (`id`, `plot_id`, `customer_id`, `RatePerSqUnit`, `salespolicy_name`, `down_payment`, `total_cost`, `emi_pattern`, `emi_mode`, `master_emi`, `master_emi_mode`, `direct_commission_to_agent`, `emi_commission_to_agent`) VALUES
+(11, 1, 2, 1000, 'Plot 2400 sqft sale', 400000, 2400000, '100000x10;50000x20', 'Monthly', 10000, 'Yearly', '2000', '20%');
 
 -- --------------------------------------------------------
 
@@ -365,11 +393,19 @@ CREATE TABLE IF NOT EXISTS `xsales_policies` (
   `down_payment` int(11) NOT NULL,
   `emi_pattern` text NOT NULL,
   `master_emi` int(11) NOT NULL,
+  `emi_mode` varchar(10) NOT NULL,
   `master_emi_mode` varchar(10) NOT NULL,
-  `direct_commission_to_take` varchar(255) NOT NULL,
-  `emi_commission_to_take` varchar(255) NOT NULL,
+  `direct_commission_to_agent` varchar(255) NOT NULL,
+  `emi_commission_to_agent` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `xsales_policies`
+--
+
+INSERT INTO `xsales_policies` (`id`, `name`, `down_payment`, `emi_pattern`, `master_emi`, `emi_mode`, `master_emi_mode`, `direct_commission_to_agent`, `emi_commission_to_agent`) VALUES
+(1, 'Plot 2400 sqft sale', 80000, '6000x30;3000x12', 10000, 'Monthly', 'Yearly', '2000', '20%');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
