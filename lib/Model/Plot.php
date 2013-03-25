@@ -44,7 +44,7 @@ class Model_Plot extends Model_Table {
 
 	}
 
-	function sale_direct($customer,$unitrate,$salespolicy,$downpayment,$totalcost,$emipattern,$emimode,$masteremi,$masteremimode,$directcommission,$emicommission){
+	function sale_direct($customer,$unitrate,$salespolicy,$downpayment,$totalcost,$emipattern,$emimode,$emistartdate,$masteremi,$masteremimode,$directcommission,$emicommission){
 		
 		$sales=$this->add('Model_Sale');
 		$sales['plot_id']=$this->id;
@@ -61,10 +61,14 @@ class Model_Plot extends Model_Table {
 		$sales['emi_commission_to_agent'] = $emicommission;
 
 		$sales->save();
-		$sales->create_emis();
+		$sales->create_emis($emistartdate);
 
 		$this['status'] ='DirectSold';
 		$this->save();
+	}
+
+	function sale_emi(){
+		
 	}
 
 }

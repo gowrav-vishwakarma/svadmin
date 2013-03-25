@@ -1,5 +1,5 @@
 <?php
-class page_sales_direct extends Page{
+class page_sales_emi extends Page{
 	function init(){
 		parent::init();
 		// $this->api->stickyGET('planning_id');
@@ -27,13 +27,19 @@ class page_sales_direct extends Page{
 			$sales_policy=$plot_for_data->ref('salespolicy_id');
 		} 
 
-		$form->addField('checkbox','new_customer')
+		$form->addField('checkbox','existing_customer')
 			->js(true)->univ()->bindConditionalShow(array(
-				''=>array('customer'),
-				'*'=>array('customer_name')
+				''=>array('customer_name'),
+				'*'=>array('customer')
 				),'div .atk-row');
 
-		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->setModel('Customer');
+		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->validateNotNull()->setModel('Customer');
+
+		$form->addField('dropdown','sponsor')->setEmptyText("Select Any Sponsor")->validateNotNull()->setModel("Distributor");
+
+		$form->addField('dropdown','leg')->setEmptyText('Select any Leg')->validateNotNull()->setValueList(array('A'=>'Leg A','B'=>'Leg B','C'=>'Leg C','D'=>'Leg D'));
+
+		$form->addField('dropdown','introducer')->setEmptyText("Select Any Sponsor")->validateNotNull()->setModel("Distributor");
 
 		$form->addField('line','customer_name');
 
@@ -73,13 +79,21 @@ class page_sales_direct extends Page{
 
 		if($form->isSubmitted()){
 
+			// Check availability in Selected LEG
+			$sponsor=$this->add('Model_Distributor');
+			$sponsor->load($form->get('sponsor'));
+			if($sponsor['leg' . $form->get('leg').'_id'] != 0 ){
+				$form->displayError('leg','This Leg is already Filled');
+			}
 
-			if($form->get('new_customer')){
-				// TODO add a new customer
-				$cust=$this->add('Model_Customer');
+
+			if(!$form->get('existing_customer')){
+				$cust=$this->add('Model_Distributor');
+				// TODO check for existing username
 				$cust['name']=$form->get('customer_name');
+				$cust->memorize('leg',$form->get('leg'));
 				$cust->save();
-				$customer=$cust->id;
+				$customer=$cust['customer_id'];
 			}else{
 				if($form->get('customer')==null) $form->displayError('customer','This is must');
 				$customer=$form->get('customer');
@@ -87,8 +101,7 @@ class page_sales_direct extends Page{
 
 			$plot=$this->add('Model_Plot');
 			$plot->load($form->get('plot_id'));
-			$plot->sale_direct(
-								$customer,
+			$plot->sale_emi($customer,
 								$form->get('rate_per_sq_unit'),
 								$form->get('sales_policy_name'),
 								$form->get('down_payment'),

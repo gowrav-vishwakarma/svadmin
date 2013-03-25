@@ -5,14 +5,26 @@ class Model_Distributor extends Model_Table {
 	function init(){
 		parent::init();
 
-		$this->hasOne('Customer','customer_id');
+		$customer=$this->join('xcustomer.id','customer_id');
+		$customer->addField('name');
+		$customer->addField('Address');
+		$customer->addField('City');
+		
 		$this->hasOne('Distributor','sponsor_distributor_id');
 		$this->hasOne('Distributor','introducer_distributor_id');
 
-		$this->hasMany('DistributorA','legA_id');
-		$this->hasMany('DistributorB','legB_id');
-		$this->hasMany('DistributorC','legC_id');
-		$this->hasMany('DistributorD','legD_id');
+		$this->addField('legA_id')->defaultValue(0);
+		$this->addField('legB_id')->defaultValue(0);
+		$this->addField('legC_id')->defaultValue(0);
+		$this->addField('legD_id')->defaultValue(0);
 
+		$this->addHook('beforeSave',$this);
+
+	}
+
+	function beforeSave(){
+		if(!$this->loaded()){
+			
+		}
 	}
 }

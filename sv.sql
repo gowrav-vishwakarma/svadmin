@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 24, 2013 at 04:30 PM
+-- Generation Time: Mar 25, 2013 at 07:22 PM
 -- Server version: 5.1.61
--- PHP Version: 5.3.6-13ubuntu3.6
+-- PHP Version: 5.3.6-13ubuntu3.10
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -251,16 +251,17 @@ CREATE TABLE IF NOT EXISTS `xcustomer` (
   `Address` varchar(255) NOT NULL,
   `City` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Dumping data for table `xcustomer`
 --
 
 INSERT INTO `xcustomer` (`id`, `name`, `Address`, `City`) VALUES
-(1, 'gowrav', 'udaipur', 'udaipur'),
+(1, 'root', 'Ahmdabaad', 'Ahmdabaad'),
 (2, 'priti ', 'udaipur', 'udaipur'),
-(3, 'ravi', 'udaipur', 'udaipur');
+(3, 'ravi', 'udaipur', 'udaipur'),
+(4, '', '', '');
 
 -- --------------------------------------------------------
 
@@ -278,7 +279,14 @@ CREATE TABLE IF NOT EXISTS `xdistributors` (
   `legC_id` int(11) NOT NULL,
   `legD_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `xdistributors`
+--
+
+INSERT INTO `xdistributors` (`id`, `customer_id`, `sponsor_distributor_id`, `introducer_distributor_id`, `legA_id`, `legB_id`, `legC_id`, `legD_id`) VALUES
+(1, 1, 0, 0, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -294,7 +302,43 @@ CREATE TABLE IF NOT EXISTS `xemis` (
   `EMIAmount` float NOT NULL,
   `AmountPaid` float NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+
+--
+-- Dumping data for table `xemis`
+--
+
+INSERT INTO `xemis` (`id`, `sales_id`, `due_date`, `paid_date`, `EMIAmount`, `AmountPaid`) VALUES
+(1, 1, '2013-04-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(2, 1, '2013-05-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(3, 1, '2013-06-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(4, 1, '2013-07-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(5, 1, '2013-08-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(6, 1, '2013-09-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(7, 1, '2013-10-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(8, 1, '2013-11-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(9, 1, '2013-12-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(10, 1, '2014-01-25 00:00:00', '0000-00-00 00:00:00', 100000, 0),
+(11, 1, '2014-02-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(12, 1, '2014-03-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(13, 1, '2014-04-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(14, 1, '2014-05-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(15, 1, '2014-06-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(16, 1, '2014-07-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(17, 1, '2014-08-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(18, 1, '2014-09-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(19, 1, '2014-10-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(20, 1, '2014-11-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(21, 1, '2014-12-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(22, 1, '2015-01-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(23, 1, '2015-02-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(24, 1, '2015-03-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(25, 1, '2015-04-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(26, 1, '2015-05-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(27, 1, '2015-06-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(28, 1, '2015-07-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(29, 1, '2015-08-25 00:00:00', '0000-00-00 00:00:00', 50000, 0),
+(30, 1, '2015-09-25 00:00:00', '0000-00-00 00:00:00', 50000, 0);
 
 -- --------------------------------------------------------
 
@@ -372,14 +416,14 @@ CREATE TABLE IF NOT EXISTS `xsales` (
   `direct_commission_to_agent` varchar(255) NOT NULL,
   `emi_commission_to_agent` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
 -- Dumping data for table `xsales`
 --
 
 INSERT INTO `xsales` (`id`, `plot_id`, `customer_id`, `RatePerSqUnit`, `salespolicy_name`, `down_payment`, `total_cost`, `emi_pattern`, `emi_mode`, `master_emi`, `master_emi_mode`, `direct_commission_to_agent`, `emi_commission_to_agent`) VALUES
-(11, 1, 2, 1000, 'Plot 2400 sqft sale', 400000, 2400000, '100000x10;50000x20', 'Monthly', 10000, 'Yearly', '2000', '20%');
+(1, 1, 1, 1000, 'Plot 2400 sqft sale', 400000, 2400000, '100000x10;50000x20', 'Monthly', 10000, 'Yearly', '2000', '20%');
 
 -- --------------------------------------------------------
 
