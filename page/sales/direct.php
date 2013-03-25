@@ -39,9 +39,9 @@ class page_sales_direct extends Page{
 		
 		$form->addField('line','emi_pattern')->set($sales_policy['emi_pattern']);
 		
-		$form->addField('dropdown','emi_mode')->setEmptyText("Select Any")->setValueList(array("Fifteen Days"=>"Fifteen Days",
+		$form->addField('dropdown','emi_mode')->setEmptyText("Select Any")->setValueList(array("Fortnightly"=>"Fortnightly",
 																	"Monthly"=>"Monthly",
-																	"Quartarly"=>"Quartarly",
+																	"Quarterly"=>"Quarterly",
 																	"Half-Yearly"=>"Half-Yearly",
 																	"Yearly"=>"Yearly"))
 																	->set($sales_policy['emi_mode']);

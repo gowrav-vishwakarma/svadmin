@@ -61,6 +61,7 @@ class Model_Plot extends Model_Table {
 		$sales['emi_commission_to_agent'] = $emicommission;
 
 		$sales->save();
+		$sales->create_emis();
 
 		$this['status'] ='DirectSold';
 		$this->save();

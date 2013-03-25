@@ -42,18 +42,40 @@ class Model_Sale extends Model_Table{
 	}
 
 	function create_emis(){
+		switch($this['emi_mode']){
+			case "Fortnightly":
+				$toAdd = " +15 day";
+				break;
+			case "Quarterly":
+				$toAdd = " +3 month";
+				break;
+			case "Half-Yearly":
+				 $toAdd = " +6 month";
+				break;
+			case "Yearly":
+				$toAdd = " +1 year";
+				break;
+			default:
+			case "Monthly":
+				$toAdd = " +1 month";
+		}
 
+		$today=date('Y-m-d');
+		$nextDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime($today)) . $toAdd));
 		foreach(explode(';', $this['emi_pattern']) as $pattern){
 			$tmp=explode('x', $pattern);
 			for($i=1;$i<=$tmp[1];$i++){
 				$emi=$this->add('Model_EMI');
 
-				$emi['due_date']=
+				$emi['due_date']= $nextDate
 				$emi['paid_date']=null;
 				$emi['EMIAmount']=$tmp[0];
 				$emi['AmountPaid']=0;
 
 				$emi->save();
+
+				$today = $nextDate;
+				$nextDate = $nextDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime($today)) . $toAdd));
 			}
 		}	
 	}
