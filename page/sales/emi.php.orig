@@ -33,7 +33,11 @@ class page_sales_emi extends Page{
 				'*'=>array('customer')
 				),'div .atk-row');
 
+<<<<<<< HEAD
 		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->setModel($this->add('Model_Customer')->addCondition('is_distributor',false));
+=======
+		$form->addField('dropdown','customer')->setModel('Customer');
+>>>>>>> 2304f259967ecd2860b1adbe0e46b9b471106d25
 
 		$form->addField('dropdown','sponsor')->setEmptyText("Select Any Sponsor")->validateNotNull()->setModel("Distributor");
 
