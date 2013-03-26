@@ -16,6 +16,7 @@ class Model_Sale extends Model_Table{
 		$this->addField('direct_commission_to_agent')->mandatory("This Field is Required");
 		$this->addField('emi_commission_to_agent')->mandatory("This Field is Required");
 		$this->hasMany('Emi','sales_id');
+		$this->hasMany('Deposite','sales_id');
 
 		$this->addHook('beforeSave',$this);
 
@@ -67,7 +68,7 @@ class Model_Sale extends Model_Table{
 			for($i=1;$i<=$tmp[1];$i++){
 				$emi=$this->add('Model_EMI');
 
-				$emi['due_date']= $nextDate
+				$emi['due_date']= $nextDate;
 				$emi['paid_date']=null;
 				$emi['EMIAmount']=$tmp[0];
 				$emi['AmountPaid']=0;

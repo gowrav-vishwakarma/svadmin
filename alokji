@@ -1,0 +1,14 @@
+
+
+1) user can edit his bank details before launching.
+2) remove mandatory validations in registration form (only bank details).
+3) add field of username and password in admin member table.
+
+4) admin can see how many times user topup.
+5) admin can see which user topup his ID.
+6) admin can aproved  rejected request and block particular user. 
+7) admin can see all gift transiction inlcluding images
+8) can not display username in send or request.
+
+8) admin memeber area paginator.
+9) 
