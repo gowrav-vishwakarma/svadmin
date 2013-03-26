@@ -17,6 +17,6 @@ class Model_Emi extends Model_Table{
 		$this['paid_date']=date('Y-m-d H:i:s');
 		$this->save();
 
-		if($this['AmountPaid'] == )
+		// if($this['AmountPaid'] == )
 	}
 }
