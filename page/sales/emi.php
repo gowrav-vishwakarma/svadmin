@@ -103,7 +103,7 @@ class page_sales_emi extends Page{
 
 			$plot=$this->add('Model_Plot');
 			$plot->load($form->get('plot_id'));
-			$plot->sale_emi($customer,
+			$plot->sale($customer,
 								$form->get('rate_per_sq_unit'),
 								$form->get('sales_policy_name'),
 								$form->get('down_payment'),
