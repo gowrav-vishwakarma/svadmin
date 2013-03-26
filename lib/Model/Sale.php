@@ -16,6 +16,7 @@ class Model_Sale extends Model_Table{
 		$this->addField('direct_commission_to_agent')->mandatory("This Field is Required");
 		$this->addField('emi_commission_to_agent')->mandatory("This Field is Required");
 		$this->hasMany('Emi','sales_id');
+		$this->hasMany('Deposite','sales_id');
 
 		$this->addHook('beforeSave',$this);
 
