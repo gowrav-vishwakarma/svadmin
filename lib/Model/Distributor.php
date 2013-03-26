@@ -18,7 +18,14 @@ class Model_Distributor extends Model_Table {
 		$this->addField('legC_id')->defaultValue(0);
 		$this->addField('legD_id')->defaultValue(0);
 
+		$this->addField('A_Commission')->defaultValue(0);
+		$this->addField('B_Commission')->defaultValue(0);
+		$this->addField('C_Commission')->defaultValue(0);
+		$this->addField('D_Commission')->defaultValue(0);
+
 		$this->addField('Path')->defaultValue(0);
+
+		$this->addExpression('inLeg')->set('RIGHT(Path,1)');
 
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterSave',$this);

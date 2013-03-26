@@ -1,6 +1,7 @@
 <?php
 class Model_Sale extends Model_Table{
 	var $table ="xsales";
+	
 	function init(){
 		parent::init();
 		$this->hasOne('Plot','plot_id')->mandatory("This is a Mandatory Field");
@@ -31,15 +32,12 @@ class Model_Sale extends Model_Table{
 		$calculated_cost=$this['down_payment'];
 
 		foreach(explode(';', $this['emi_pattern']) as $pattern){
-				// echo"<pre>";
-				// print_r($pattern);
-				// echo "</pre>";
 			$tmp=explode("x", $pattern);
 				$calculated_cost += ($tmp[0]*$tmp[1]); 
 		}
 
 		if($this['total_cost'] != $calculated_cost)
-			throw $this->exception("Total Cost is not Equal to calculated emi pattern".$calculated_cost);
+			throw $this->exception("Total Cost is not Equal to calculated emi pattern ".$calculated_cost);
 	}
 
 	function create_emis($emistartdate){
