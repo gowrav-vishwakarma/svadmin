@@ -11,5 +11,9 @@ class Model_Customer extends Model_Table {
 
 		$this->hasMany('Distributor','customer_id');
 		$this->hasMany('Sale','customer_id',null,'Purchases');
+
+		$this->addExpression('is_distributor')->set(function($m,$q){
+			return $m->refSQL('Distributor')->count();
+		})->type('boolean');
 	}
 }

@@ -13,10 +13,12 @@ class Model_Sale extends Model_Table{
 		$this->addField('emi_pattern')->type('text')->mandatory("This Field is Required");
 		$this->addField('emi_mode')->mandatory("This Field is Required");
 		$this->addField('master_emi')->mandatory("This Field is Required");
+		$this->addField('no_of_master_emi')->mandatory("This Field is Required");
 		$this->addField('master_emi_mode')->enum(array('Half-Yearly',"Yearly"))->mandatory("This Field is Required");
 		$this->addField('direct_commission_to_agent')->mandatory("This Field is Required");
 		$this->addField('emi_commission_to_agent')->mandatory("This Field is Required");
 		$this->addField('down_payment_submitted')->mandatory("This Field is Required");
+		
 		$this->hasMany('Emi','sales_id');
 		$this->hasMany('Deposite','sales_id');
 
@@ -93,7 +95,7 @@ class Model_Sale extends Model_Table{
 					$emi['EMIAmount']=$this['master_emi'];
 					$emi['AmountPaid']=0;
 					$emi['sales_id']=$this->id;
-					$emi['is_master']=true;
+					$emi['is_master_emi']=true;
 					$emi->save();					
 				}
 
@@ -103,9 +105,17 @@ class Model_Sale extends Model_Table{
 		}	
 	}
 
-	function depositAmount($AmountPaid){
+	function depositAmount($AmountPaid,$date=null){
 
 		// throw new Exception("Error Processing Request");
+
+		if($date==null) $date = date('Y-m-d');
+
+		$deposit = $this->add('Model_Deposite');
+		$deposit['sales_id']=$this->id;
+		$deposit['Amount']=$AmountPaid;
+		$deposit['paid_date']=$date;
+		$deposit->save();
 
 		if(($this['down_payment'] - $this['down_payment_submitted']) > $AmountPaid){
 			$amount_for_downpayment = $AmountPaid; 
@@ -127,7 +137,7 @@ class Model_Sale extends Model_Table{
 				$amount_for_this_emi = $emi['EMIAmount']-$emi['AmountPaid'];
 			}
 
-			$emi->pay($amount_for_this_emi);
+			$emi->pay($amount_for_this_emi,$date);
 
 			$amount_for_emi = $amount_for_emi - $amount_for_this_emi;
 			if($amount_for_emi == 0) break;

@@ -49,9 +49,9 @@ class page_sales_payment extends Page{
 			
 			$sales=$this->add('Model_Sale');
 			$sales->load($form->get('sales'));
-			$sales->depositAmount($form->get('amount'));
+			$sales->depositAmount($form->get('amount'),$form->get('paid_date'));
 
-			$form->js()->reload()->execute();
+			$form->js(null,$form->js()->univ()->successMessage("Amount Submitted"))->reload()->execute();
 
 			
 		}

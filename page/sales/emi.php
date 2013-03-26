@@ -33,7 +33,7 @@ class page_sales_emi extends Page{
 				'*'=>array('customer')
 				),'div .atk-row');
 
-		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->validateNotNull()->setModel('Customer');
+		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->setModel($this->add('Model_Customer')->addCondition('is_distributor',false));
 
 		$form->addField('dropdown','sponsor')->setEmptyText("Select Any Sponsor")->validateNotNull()->setModel("Distributor");
 
@@ -63,6 +63,8 @@ class page_sales_emi extends Page{
 		$form->addField('DatePicker','emi_start_date')->set(date("Y-m-d", strtotime(date('Y-m-d')." +1 month" )));
 		
 		$form->addField('line','master_emi')->set($sales_policy['master_emi']);
+		
+		$form->addField('line','no_of_master_emi')->set($sales_policy['no_of_master_emi']);
 		
 		$form->addField('dropdown','master_emi_mode')->setEmptyText("Select Any")->setValueList(array("Half-Yearly"=>"Half-Yearly",
 																									"Yearly"=>"Yearly"))
@@ -112,9 +114,11 @@ class page_sales_emi extends Page{
 								$form->get('emi_mode'),
 								$form->get('emi_start_date'),
 								$form->get('master_emi'),
+								$form->get('no_of_master_emi'),
 								$form->get('master_emi_mode'),
 								$form->get('direct_commission_to_agent'),
-								$form->get('emi_commission_to_agent')
+								$form->get('emi_commission_to_agent'),
+								'EMISold'
 									);
 			
 			$form->js(null,$form->js()->univ()->successMessage("Plot sold successfully"))->reload()->execute();

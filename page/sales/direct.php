@@ -58,6 +58,8 @@ class page_sales_direct extends Page{
 		
 		$form->addField('line','master_emi')->set($sales_policy['master_emi']);
 		
+		$form->addField('line','no_of_master_emi')->set($sales_policy['no_of_master_emi']);
+		
 		$form->addField('dropdown','master_emi_mode')->setEmptyText("Select Any")->setValueList(array("Half-Yearly"=>"Half-Yearly",
 																									"Yearly"=>"Yearly"))
 																									->set($sales_policy['master_emi_mode']);
@@ -97,9 +99,11 @@ class page_sales_direct extends Page{
 								$form->get('emi_mode'),
 								$form->get('emi_start_date'),
 								$form->get('master_emi'),
+								$form->get('no_of_master_emi'),
 								$form->get('master_emi_mode'),
 								$form->get('direct_commission_to_agent'),
-								$form->get('emi_commission_to_agent')
+								$form->get('emi_commission_to_agent'),
+								'DirectSold'
 									);
 			
 			$form->js(null,$form->js()->univ()->successMessage("Plot sold successfully"))->reload()->execute();

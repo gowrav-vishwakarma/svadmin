@@ -5,6 +5,7 @@ class Model_Distributor extends Model_Table {
 	function init(){
 		parent::init();
 
+		$this->hasOne('Customer','customer_id');
 		$customer=$this->join('xcustomer.id','customer_id');
 		$customer->addField('name');
 		$customer->addField('Address');
