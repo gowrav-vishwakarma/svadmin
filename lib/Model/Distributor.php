@@ -10,13 +10,15 @@ class Model_Distributor extends Model_Table {
 		$customer->addField('Address');
 		$customer->addField('City');
 		
-		$this->hasOne('Distributor','sponsor_distributor_id');
-		$this->hasOne('Distributor','introducer_distributor_id');
+		$this->hasOne('Distributor','sponsor_id');
+		$this->hasOne('Distributor','introducer_id');
 
 		$this->addField('legA_id')->defaultValue(0);
 		$this->addField('legB_id')->defaultValue(0);
 		$this->addField('legC_id')->defaultValue(0);
 		$this->addField('legD_id')->defaultValue(0);
+
+		$this->addField('Path')->defaultValue(0);
 
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterSave',$this);
@@ -26,7 +28,8 @@ class Model_Distributor extends Model_Table {
 	function beforeSave(){
 		if(!$this->loaded()){
 			$this->memorize('is_new',true);
-			
+			$sponsor=$this->ref('sponsor_id');
+			$this['Path'] = $sponsor['Path']. $this->recall('leg');
 		}
 	}
 

@@ -88,13 +88,14 @@ class page_sales_emi extends Page{
 
 
 			if(!$form->get('existing_customer')){
-				$cust=$this->add('Model_Distributor');
+				$dist=$this->add('Model_Distributor');
 				// TODO check for existing username
-				$cust['name']=$form->get('customer_name');
-				$cust['sponsor_id']=$form->get('sponsor');
-				$cust->memorize('leg',$form->get('leg'));
-				$cust->save();
-				$customer=$cust['customer_id'];
+				$dist['name']=$form->get('customer_name');
+				$dist['sponsor_id']=$form->get('sponsor');
+				$dist['introducer_id']=$form->get('introducer');
+				$dist->memorize('leg',$form->get('leg'));
+				$dist->save();
+				$customer=$dist['customer_id'];
 			}else{
 				if($form->get('customer')==null) $form->displayError('customer','This is must');
 				$customer=$form->get('customer');

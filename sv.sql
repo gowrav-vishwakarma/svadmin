@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 26, 2013 at 09:53 AM
+-- Generation Time: Mar 26, 2013 at 10:40 AM
 -- Server version: 5.1.61
 -- PHP Version: 5.3.6-13ubuntu3.10
 
@@ -286,12 +286,13 @@ INSERT INTO `xcustomer` (`id`, `name`, `Address`, `City`) VALUES
 CREATE TABLE IF NOT EXISTS `xdistributors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
-  `sponsor_distributor_id` int(11) NOT NULL,
-  `introducer_distributor_id` int(11) NOT NULL,
+  `sponsor_id` int(11) NOT NULL,
+  `introducer_id` int(11) NOT NULL,
   `legA_id` int(11) NOT NULL,
   `legB_id` int(11) NOT NULL,
   `legC_id` int(11) NOT NULL,
   `legD_id` int(11) NOT NULL,
+  `Path` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
@@ -299,8 +300,8 @@ CREATE TABLE IF NOT EXISTS `xdistributors` (
 -- Dumping data for table `xdistributors`
 --
 
-INSERT INTO `xdistributors` (`id`, `customer_id`, `sponsor_distributor_id`, `introducer_distributor_id`, `legA_id`, `legB_id`, `legC_id`, `legD_id`) VALUES
-(1, 1, 0, 0, 0, 0, 0, 0);
+INSERT INTO `xdistributors` (`id`, `customer_id`, `sponsor_id`, `introducer_id`, `legA_id`, `legB_id`, `legC_id`, `legD_id`, `Path`) VALUES
+(1, 1, 0, 0, 0, 0, 0, 0, '0');
 
 -- --------------------------------------------------------
 
