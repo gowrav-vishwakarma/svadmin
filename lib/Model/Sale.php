@@ -42,7 +42,7 @@ class Model_Sale extends Model_Table{
 			throw $this->exception("Total Cost is not Equal to calculated emi pattern".$calculated_cost);
 	}
 
-	function create_emis(){
+	function create_emis($emistartdate){
 		switch($this['emi_mode']){
 			case "Fortnightly":
 				$toAdd = " +15 day";
@@ -61,17 +61,18 @@ class Model_Sale extends Model_Table{
 				$toAdd = " +1 month";
 		}
 
-		$today=date('Y-m-d');
+		$today=$emistartdate;
 		$nextDate = date("Y-m-d", strtotime(date("Y-m-d", strtotime($today)) . $toAdd));
 		foreach(explode(';', $this['emi_pattern']) as $pattern){
 			$tmp=explode('x', $pattern);
 			for($i=1;$i<=$tmp[1];$i++){
-				$emi=$this->add('Model_EMI');
+				$emi=$this->add('Model_Emi');
 
 				$emi['due_date']= $nextDate;
 				$emi['paid_date']=null;
 				$emi['EMIAmount']=$tmp[0];
 				$emi['AmountPaid']=0;
+				$emi['sales_id']=$this->id;
 
 				$emi->save();
 
