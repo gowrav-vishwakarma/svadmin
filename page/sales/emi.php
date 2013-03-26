@@ -91,6 +91,7 @@ class page_sales_emi extends Page{
 				$cust=$this->add('Model_Distributor');
 				// TODO check for existing username
 				$cust['name']=$form->get('customer_name');
+				$cust['sponsor_id']=$form->get('sponsor');
 				$cust->memorize('leg',$form->get('leg'));
 				$cust->save();
 				$customer=$cust['customer_id'];

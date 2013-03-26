@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Mar 25, 2013 at 07:22 PM
+-- Generation Time: Mar 26, 2013 at 09:53 AM
 -- Server version: 5.1.61
 -- PHP Version: 5.3.6-13ubuntu3.10
 
@@ -238,6 +238,20 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`id`, `name`, `username`, `password`, `created_on`, `is_system_admin`) VALUES
 (1, 'root', 'root', 'admin', '0000-00-00 00:00:00', 1),
 (4, '', 'user', 'admin', '0000-00-00 00:00:00', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `xamount_deposited`
+--
+
+CREATE TABLE IF NOT EXISTS `xamount_deposited` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sales_id` int(11) NOT NULL,
+  `Amount` int(11) NOT NULL,
+  `paid_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
