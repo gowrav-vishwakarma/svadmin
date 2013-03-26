@@ -93,7 +93,7 @@ class Model_Sale extends Model_Table{
 					$emi['EMIAmount']=$this['master_emi'];
 					$emi['AmountPaid']=0;
 					$emi['sales_id']=$this->id;
-					$emi['is_master']=true;
+					$emi['is_master_emi']=true;
 					$emi->save();					
 				}
 

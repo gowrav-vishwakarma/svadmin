@@ -33,7 +33,7 @@ class page_sales_emi extends Page{
 				'*'=>array('customer')
 				),'div .atk-row');
 
-		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->validateNotNull()->setModel('Customer');
+		$form->addField('dropdown','customer')->setModel('Customer');
 
 		$form->addField('dropdown','sponsor')->setEmptyText("Select Any Sponsor")->validateNotNull()->setModel("Distributor");
 
@@ -98,6 +98,13 @@ class page_sales_emi extends Page{
 				$customer=$dist['customer_id'];
 			}else{
 				if($form->get('customer')==null) $form->displayError('customer','This is must');
+				$dist=$this->add('Model_Customer')->load($form->get('customer'))->ref('Distributor')->tryLoadAny();
+				// TODO check for existing username
+				// $dist['name']=$form->get('customer_name');
+				$dist['sponsor_id']=$form->get('sponsor');
+				$dist['introducer_id']=$form->get('introducer');
+				$dist->memorize('leg',$form->get('leg'));
+				$dist->save();
 				$customer=$form->get('customer');
 			}
 
