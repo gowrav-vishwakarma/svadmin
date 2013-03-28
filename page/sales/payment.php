@@ -5,7 +5,7 @@ class page_sales_payment extends Page{
 
 		$customer=$this->add('Model_Customer');
 		$sales=$this->add('Model_Sale');
-		$view=$this->add('View_Info');
+		$view=$this->add('View_Info')->set('Select Sale to get Information');
 		
 
 		$form=$this->add('Form');
