@@ -14,6 +14,7 @@ class page_sales_payment extends Page{
 
 		$sales_field=$form->addField('dropdown','sales')->setEmptyText("Select Any")->validateNotNull();
 		$form->addField('line','amount');
+		$form->addField('ChecKBox','adjust_master_emi_first');
 		$form->addField('line','narration');
 		$form->addField('DatePicker','paid_date')->set(date('Y-m-d'));
 		$form->addSubmit('Deposite');
@@ -46,14 +47,21 @@ class page_sales_payment extends Page{
 	
 		if($form->isSubmitted()){
 
-			
-			$sales=$this->add('Model_Sale');
-			$sales->load($form->get('sales'));
-			$sales->depositAmount($form->get('amount'),$form->get('paid_date'));
+			try{
+				
+				$form->api->db->beginTransaction();
 
-			$form->js(null,$form->js()->univ()->successMessage("Amount Submitted"))->reload()->execute();
-
-			
+				$sales=$this->add('Model_Sale');
+				$sales->load($form->get('sales'));
+				$sales->depositAmount($form->get('amount'),$form->get('paid_date'));
+				
+			}catch(Exception $e){
+				$form->api->db->rollback();
+					// $form->js()->univ()->errorMessage($e->getMessage())->execute();
+					throw $e;
+			}
+			$form->api->db->commit();
+			$form->js(null,$this->js()->reload())->univ()->successMessage("Payment Deposite success fully ")->execute();
 		}
 	}
 }

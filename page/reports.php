@@ -4,7 +4,7 @@ class page_reports extends Page{
 		parent::init();
 
 		$tabs=$this->add('Tabs');
-		$tabs->addtabUrl('reports_sales','Sales Reports');
+		$tabs->addtabUrl('reports_directsale','Sales Reports');
 		$tabs->addtabUrl('reports_mrkt','Marketing Reports');
 
 	}

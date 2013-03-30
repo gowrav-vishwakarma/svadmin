@@ -44,11 +44,12 @@ class Model_Plot extends Model_Table {
 
 	}
 
-	function sale($customer,$unitrate,$salespolicy,$downpayment,$totalcost,$emipattern,$emimode,$emistartdate,$masteremi,$noOfmasterEmi,$masteremimode,$directcommission,$emicommission,$soldmethod){
+	function sale($customer,$agent,$unitrate,$salespolicy,$downpayment,$totalcost,$emipattern,$emimode,$emistartdate,$masteremi,$noOfmasterEmi,$masteremimode,$directcommission,$emicommission,$soldmethod){
 		
 		$sales=$this->add('Model_Sale');
 		$sales['plot_id']=$this->id;
 		$sales['customer_id']=$customer;
+		$sales['agent_id']=$agent;
 		$sales['RatePerSqUnit']=$unitrate;
 		$sales['salespolicy_name'] = $salespolicy;
 		$sales['down_payment'] =$downpayment;

@@ -30,6 +30,8 @@ class Model_Distributor extends Model_Table {
 
 		$this->addHook('beforeSave',$this);
 		$this->addHook('afterSave',$this);
+		
+		// $this->debug();
 
 	}
 

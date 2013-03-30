@@ -1,4 +1,5 @@
 <?php
+
 class page_sales_direct extends Page{
 	function init(){
 		parent::init();
@@ -30,12 +31,19 @@ class page_sales_direct extends Page{
 		$form->addField('checkbox','new_customer')
 			->js(true)->univ()->bindConditionalShow(array(
 				''=>array('customer'),
-				'*'=>array('customer_name')
+				'*'=>array('customer_name','address','city')
 				),'div .atk-row');
 
 		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->setModel('Customer');
 
+
+		$form->addField('dropdown','agent')->setEmptyText('Select Any Agent')->validateNotNull()->setModel('Agent');
+		
 		$form->addField('line','customer_name');
+
+		$form->addField('text','address');
+		
+		$form->addField('line','city');
 
 		$form->addField('line','rate_per_sq_unit')->set($plot_for_data['SqAreaCost']);
 
@@ -74,39 +82,49 @@ class page_sales_direct extends Page{
 		$plot_field->js('change',$form->js()->reload(array('planning_id'=>$_GET['planning_id'],'plot_id'=>$plot_field->js()->val())));
 
 		if($form->isSubmitted()){
+			try{
 
+				$form->api->db->beginTransaction();
+				if($form->get('new_customer')){
+					// TODO add a new customer
+					$cust=$this->add('Model_Customer');
+					$cust['name']=$form->get('customer_name');
+					$cust['Address']=$form->get('address');
+					$cust['City']=$form->get('city');
+					$cust->save();
+					$customer=$cust->id;
+				}else{
+					if($form->get('customer')==null) $form->displayError('customer','This is must');
+					$customer=$form->get('customer');
+				}
 
-			if($form->get('new_customer')){
-				// TODO add a new customer
-				$cust=$this->add('Model_Customer');
-				$cust['name']=$form->get('customer_name');
-				$cust->save();
-				$customer=$cust->id;
-			}else{
-				if($form->get('customer')==null) $form->displayError('customer','This is must');
-				$customer=$form->get('customer');
+				$plot=$this->add('Model_Plot');
+				$plot->load($form->get('plot_id'));
+				$plot->sale(
+									$customer,
+									$form->get('agent'),
+									$form->get('rate_per_sq_unit'),
+									$form->get('sales_policy_name'),
+									$form->get('down_payment'),
+									$form->get('total_cost'),
+									$form->get('emi_pattern'),
+									$form->get('emi_mode'),
+									$form->get('emi_start_date'),
+									$form->get('master_emi'),
+									$form->get('no_of_master_emi'),
+									$form->get('master_emi_mode'),
+									$form->get('direct_commission_to_agent'),
+									$form->get('emi_commission_to_agent'),
+									'DirectSold'
+										);
+			}catch(Exception $e){
+					$form->api->db->rollback();
+					// $form->js()->univ()->errorMessage($e->getMessage())->execute();
+					throw $e;
 			}
+			$form->api->db->commit();
+			$form->js(null,$this->js()->reload())->univ()->successMessage("plot Sale success fully ")->execute();
 
-			$plot=$this->add('Model_Plot');
-			$plot->load($form->get('plot_id'));
-			$plot->sale(
-								$customer,
-								$form->get('rate_per_sq_unit'),
-								$form->get('sales_policy_name'),
-								$form->get('down_payment'),
-								$form->get('total_cost'),
-								$form->get('emi_pattern'),
-								$form->get('emi_mode'),
-								$form->get('emi_start_date'),
-								$form->get('master_emi'),
-								$form->get('no_of_master_emi'),
-								$form->get('master_emi_mode'),
-								$form->get('direct_commission_to_agent'),
-								$form->get('emi_commission_to_agent'),
-								'DirectSold'
-									);
-			
-			$form->js(null,$form->js()->univ()->successMessage("Plot sold successfully"))->reload()->execute();
 
 		}
 

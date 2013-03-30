@@ -81,7 +81,9 @@ class page_sales_emi extends Page{
 
 		if($form->isSubmitted()){
 
+			try{
 			// Check availability in Selected LEG
+			$form->api->db->beginTransaction();
 			$sponsor=$this->add('Model_Distributor');
 			$sponsor->load($form->get('sponsor'));
 			if($sponsor['leg' . $form->get('leg').'_id'] != 0 ){
@@ -112,7 +114,9 @@ class page_sales_emi extends Page{
 
 			$plot=$this->add('Model_Plot');
 			$plot->load($form->get('plot_id'));
-			$plot->sale($customer,
+			$plot->sale(
+								$customer,
+								null,
 								$form->get('rate_per_sq_unit'),
 								$form->get('sales_policy_name'),
 								$form->get('down_payment'),
@@ -127,8 +131,14 @@ class page_sales_emi extends Page{
 								$form->get('emi_commission_to_agent'),
 								'EMISold'
 									);
-			
-			$form->js(null,$form->js()->univ()->successMessage("Plot sold successfully"))->reload()->execute();
+			}catch(Exception $e){
+				$form->api->db->rollback();
+				echo $form->get('total_cost');
+					// $form->js()->univ()->errorMessage($e->getMessage())->execute();
+					throw $e;
+			}
+			$form->api->db->commit();
+			$form->js(null,$this->js()->reload())->univ()->successMessage("plot Sale success fully ")->execute();
 
 		}
 
