@@ -1,7 +1,7 @@
 <?php
 
 define('SALE','Sale');
-define('DISTRIBUTE','100,90,80,70,60,50');
+define('DISTRIBUTE','200,150,125,100,75');
 
 $config['atk']['base_path']='./atk4/';
 $config['dsn']='mysql://root:winserver@localhost/sv';
