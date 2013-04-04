@@ -19,6 +19,7 @@ class Model_Distributor extends Model_Table {
 		$this->addField('legC_id')->defaultValue(0);
 		$this->addField('legD_id')->defaultValue(0);
 
+		$this->addField('Introduction_Income')->defaultValue(0);
 		$this->addField('A_Commission')->defaultValue(0);
 		$this->addField('B_Commission')->defaultValue(0);
 		$this->addField('C_Commission')->defaultValue(0);

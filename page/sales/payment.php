@@ -1,10 +1,10 @@
-<?php
+	<?php
 class page_sales_payment extends Page{
 	function init(){
 		parent::init();
 
 		$customer=$this->add('Model_Customer');
-		$sales=$this->add('Model_Sale');
+		$sales=$this->add('Model_Sale_Current');
 		$view=$this->add('View_Info')->set('Select Sale to get Information');
 		
 
@@ -14,13 +14,13 @@ class page_sales_payment extends Page{
 
 		$sales_field=$form->addField('dropdown','sales')->setEmptyText("Select Any")->validateNotNull();
 		$form->addField('line','amount');
-		$form->addField('ChecKBox','adjust_master_emi_first');
+		$form->addField('checkbox','adjust_master_emi_first');
 		$form->addField('line','narration');
 		$form->addField('DatePicker','paid_date')->set(date('Y-m-d'));
 		$form->addSubmit('Deposite');
 
 		if($_GET['sales_id']){
-			$sale=$this->add('Model_Sale');
+			$sale=$this->add('Model_Sale_Current');
 			$sale->load($_GET['sales_id']);
 			// echo $sale['down_payment'];
 
@@ -51,9 +51,9 @@ class page_sales_payment extends Page{
 				
 				$form->api->db->beginTransaction();
 
-				$sales=$this->add('Model_Sale');
+				$sales=$this->add('Model_Sale_Current');
 				$sales->load($form->get('sales'));
-				$sales->depositAmount($form->get('amount'),$form->get('paid_date'));
+				$sales->depositAmount($form->get('amount'),$form->get('paid_date'),$form->get('adjust_master_emi_first'));
 				
 			}catch(Exception $e){
 				$form->api->db->rollback();

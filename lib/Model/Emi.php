@@ -23,8 +23,9 @@ class Model_Emi extends Model_Table{
 		$this['paid_date']=$date;
 		$this->save();
 
+		// Commission distribution in EMI Plan
 		if ( $this['AmountPaid'] == $this['EMIAmount'] and $this->ref( 'sales_id' )->ref( 'plot_id' )->get( 'status' ) == 'EMISold' ) {
-			// EMI is complete and if this belongs to EMI Sold then distribute the commission in tree
+			//+++ EMI is complete and if this belongs to EMI Sold then distribute the commission in tree
 			$customer = $this->ref( 'sales_id' )->ref( 'customer_id' );
 			$distributor = $customer->ref( 'Distributor' )->tryLoadAny();
 			if ( !$distributor->loaded() ) throw $this->exception( 'There is some concurrency in this plot sold. Status is EMI sold while no distributor is available for this plot' );
@@ -39,5 +40,6 @@ class Model_Emi extends Model_Table{
 				$i++;
 			}
 		}
+		//+++ else if it is DIRECT SALE:: Commission is distributed in Sales::depositAmount()
 	}
 }

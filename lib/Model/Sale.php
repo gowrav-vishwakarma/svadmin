@@ -19,6 +19,8 @@ class Model_Sale extends Model_Table{
 		$this->addField( 'direct_commission_to_agent' )->mandatory( "This Field is Required" )->caption( "Direct Commision" );
 		$this->addField( 'emi_commission_to_agent' )->mandatory( "This Field is Required" )->caption( "Emi Commission" );
 		$this->addField( 'down_payment_submitted' )->mandatory( "This Field is Required" );
+		$this->addField( 'sales_date' )->type('date')->defaultValue(date('Y-m-d'));
+		$this->addField( 'is_current' )->type('boolean')->defaultValue(true);
 
 		$this->hasMany( 'Emi', 'sales_id' );
 		$this->hasMany( 'Deposite', 'sales_id' );
@@ -113,17 +115,38 @@ class Model_Sale extends Model_Table{
 		}
 	}
 
-	function depositAmount( $AmountPaid, $date=null ) {
-
-		// throw new Exception("Error Processing Request");
-
+	function depositAmount( $AmountPaid, $date=null, $adjustMasterEmiFirst=false ) {
 		if ( $date==null ) $date = date( 'Y-m-d' );
 
-		$deposit = $this->add( 'Model_Deposite' );
+		$deposit = $this->add( 'Model_Deposite');
 		$deposit['sales_id']=$this->id;
 		$deposit['Amount']=$AmountPaid;
 		$deposit['paid_date']=$date;
 		$deposit->save();
+
+		//+++ If first deposit is done right above and plot is sold in EMMIPlan give IntroducerIncome to Introducer
+		if($this->ref('Deposite')->count()->getOne() ==1 and $this->ref('plot_id')->get( 'status' ) == 'EMISold'){
+			$distributor = $this->ref('customer_id')->ref('Distributor')->tryLoadANy();
+			$introducer = $distributor->ref('introducer_id');
+			if($introducer->loaded()){
+				if(strpos("%",$this['direct_commission_to_agent']) !== false) throw $this->exception('This sales policy contain % sign in direct agent commisison, This Sales Policy is made for Direct Sale and cannot be used for EMIplan sale');
+				$introducer['Introduction_Income'] = $introducer['Introduction_Income'] + $this['direct_commission_to_agent'];
+				$introducer->save();
+			}
+		}
+
+		if($adjustMasterEmiFirst){
+			//+++ NO COMMISSION IS ALLOTED FOR MASTER EMI's
+			$emi=$this->ref( 'Emi' )
+					->addCondition('is_master_emi',true)
+					->addCondition('AmountPaid',0)
+					->tryLoadAny();
+			if($AmountPaid < $emi['EMIAmount']) throw $this->exception('Master EMI cannot be adjusted, requirs '. $emi['EMIAmount']. " Rs minimum");
+			$emi['AmountPaid'] = $emi['EMIAmount'];
+			$emi['paid_date']=$date;
+			$AmountPaid -= $emi['AmountPaid'];
+			$emi->saveAs('Emi');
+		}
 
 		if ( ( $this['down_payment'] - $this['down_payment_submitted'] ) > $AmountPaid ) {
 			$amount_for_downpayment = $AmountPaid;
@@ -133,15 +156,17 @@ class Model_Sale extends Model_Table{
 			$amount_for_emi = $AmountPaid - $amount_for_downpayment;
 		}
 
+		//+++ Down Payment for DIrect Sale is directly submitted here 
 		$this['down_payment_submitted'] = $this['down_payment_submitted'] + $amount_for_downpayment;
 		$this->save();
 
+		//+++ Distributor Agent Commission here for DIRECT Sale for EMIPlan it is in emai->pay()
 		if ( $this['agent_id'] and $amount_for_downpayment > 0 )
 			$this->ref( 'agent_id' )->payCommission( $this, $deposit, $amount_for_downpayment, 'downpayment' );
 
 		if ( $amount_for_emi == 0 ) return;
 
-		foreach ( $emi=$this->ref( 'Emi' ) as $junk ) {
+		foreach ( $emi=$this->ref( 'Emi' )->addCondition('is_master_emi',false) as $junk ) {
 			if ( ( $emi['EMIAmount']-$emi['AmountPaid'] ) > $amount_for_emi ) {
 				$amount_for_this_emi = $amount_for_emi;
 			}else {
@@ -150,8 +175,9 @@ class Model_Sale extends Model_Table{
 
 			$emi->pay( $amount_for_this_emi, $date );
 
+			//+++ Distributor Agent Commission here for DIRECT Sale for EMIPlan it is in emai->pay()
 			if ( $this['agent_id'] )
-				$this->ref( 'agent_id' )->payCommission( $this, $deposit, $amount_for_this_emi, 'emi' );
+				$this->ref( 'agent_id' )->payCommission( $this, $deposit, $amount_for_this_emi, 'emi' , $emi['EMIAmount'] );
 
 			$amount_for_emi = $amount_for_emi - $amount_for_this_emi;
 			if ( $amount_for_emi == 0 ) break;

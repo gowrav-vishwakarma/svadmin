@@ -18,9 +18,9 @@ class Model_Agent extends Model_Table{
 			
 	}
 
-	function payCommission($sales, $amount_deposited, $amount, $type='emi'){
+	function payCommission($sales, $amount_deposited, $amount, $type='emi',$out_of_amount=0){
 		if($type=='emi') 
-			$this->payEmiCommission($sales, $amount_deposited, $amount);
+			$this->payEmiCommission($sales, $amount_deposited, $amount,$out_of_amount);
 		else
 			$this->payDownPaymentCommission($sales, $amount_deposited, $amount);
 
@@ -37,13 +37,25 @@ class Model_Agent extends Model_Table{
 		$agent_commission = $this->add('Model_AgentCommission');
 		$agent_commission['commission'] = $amount * $amount_percentage / 100;
 		$agent_commission['agent_id'] = $this->id;
-		$agent_commission['amount_deposited_id'] = $amount_deposited_m->id;
+		$agent_commission['amount_deposite_id'] = $amount_deposited_m->id;
 		$agent_commission->save();
 
 	}
 
-	function payEmiCommission($sales, $amount_deposited, $amount){
+	function payEmiCommission($sales, $amount_deposited_m, $amount /*Per emi amount sent by foreach loop*/,$out_of_amount){
+		// TODO set commission also in pattern of xy% x no_of_emi;ab% x next_emis_count etc...
+		$amount_for_this_amount = $sales['emi_commission_to_agent'];
+		if(strpos("%", $amount_for_this_amount)!==false){
+			$amount_percentage = trim($sales['emi_commission_to_agent'],"%");
+		}else{
+			$amount_percentage = $sales['emi_commission_to_agent'] / $out_of_amount * 100;
+		}
 
+		$agent_commission = $this->add('Model_AgentCommission');
+		$agent_commission['commission'] = $amount * $amount_percentage / 100;
+		$agent_commission['agent_id'] = $this->id;
+		$agent_commission['amount_deposite_id'] = $amount_deposited_m->id;
+		$agent_commission->save();
 	}
 
 }

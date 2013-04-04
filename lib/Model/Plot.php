@@ -49,7 +49,7 @@ class Model_Plot extends Model_Table {
 		$sales=$this->add('Model_Sale');
 		$sales['plot_id']=$this->id;
 		$sales['customer_id']=$customer;
-		$sales['agent_id']=$agent;
+		$sales['agent_id']=$agent; //No commission right now, commission on payment deposit
 		$sales['RatePerSqUnit']=$unitrate;
 		$sales['salespolicy_name'] = $salespolicy;
 		$sales['down_payment'] =$downpayment;
