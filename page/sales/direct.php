@@ -31,7 +31,11 @@ class page_sales_direct extends Page{
 		$form->addField('checkbox','new_customer')
 			->js(true)->univ()->bindConditionalShow(array(
 				''=>array('customer'),
-				'*'=>array('customer_name','address','city')
+				'*'=>array('customer_name','username','password','re_password','address','Occupation','Company_Name','Company_Address','PAN_No','Email_Id',
+					'CoApplicant_Name','CoApplicant_Occupation','CoApplicant_Address','CoApplicant_Designation',
+					'CoApplicantCompanyAddress','CoApplicant_PAN_No','CoApplicant_Contact_No',
+					'CoApplicant_Email_Id','Name_Of_Nominee','Relation_With_Applicant',
+					'Nominee_PAN_NO','Nominee_Age','Nominee_Address')
 				),'div .atk-row');
 
 		$form->addField('dropdown','customer')->setEmptyText('Select Any Customer')->setModel('Customer');
@@ -41,9 +45,52 @@ class page_sales_direct extends Page{
 		
 		$form->addField('line','customer_name');
 
+		$form->addField('line','username');
+
+		$form->addField('password','password');
+		
+		$form->addField('password','re_password');
+
+
 		$form->addField('text','address');
 		
-		$form->addField('line','city');
+		$form->addField('line','Occupation');
+		
+		$form->addField('line','Company_Name');
+		
+		$form->addField('line','Company_Address');
+		
+		$form->addField('line','PAN_No');
+		
+		$form->addField('line','Email_Id');
+		
+		$form->addField('line','CoApplicant_Name');
+		
+		$form->addField('line','CoApplicant_Occupation');
+		
+		$form->addField('text','CoApplicant_Address');
+		
+		$form->addField('line','CoApplicant_Designation');
+		
+		$form->addField('text','CoApplicantCompanyAddress');
+		
+		$form->addField('line','CoApplicant_PAN_No');
+		
+		$form->addField('line','CoApplicant_Contact_No');
+		
+		$form->addField('line','CoApplicant_Email_Id');
+		
+
+		$form->addField('line','Name_Of_Nominee');
+
+		$form->addField('line','Relation_With_Applicant');
+
+		$form->addField('line','Nominee_PAN_NO');
+
+		$form->addField('line','Nominee_Age');
+
+		$form->addField('text','Nominee_Address');
+		// $form->addField('line','city');
 
 		$form->addField('line','rate_per_sq_unit')->set($plot_for_data['SqAreaCost']);
 
@@ -86,11 +133,31 @@ class page_sales_direct extends Page{
 
 				$form->api->db->beginTransaction();
 				if($form->get('new_customer')){
+					if($form->get('password')!= $form->get('re_password'))
+					$form->displayError('password','password does not Match, Check Again');
+
 					// TODO add a new customer
 					$cust=$this->add('Model_Customer');
 					$cust['name']=$form->get('customer_name');
+					$cust['username']=$form->get('username');
+					$cust['password']=$form->get('password');
 					$cust['Address']=$form->get('address');
-					$cust['City']=$form->get('city');
+					$cust['Occupation']=$form->get('Occupation');
+					$cust['Company_Name']=$form->get('Company_Name');
+					$cust['Company_Address']=$form->get('Company_Address');
+					$cust['PAN_No']=$form->get('PAN_No');
+					$cust['Contact_No']=$form->get('Contact_No');
+					$cust['Email_Id']=$form->get('Email_Id');
+					$cust['CoApplicant_Name']=$form->get('CoApplicant_Name');
+					$cust['CoApplicant_Occupation']=$form->get('CoApplicant_Occupation');
+					$cust['CoApplicant_Address']=$form->get('CoApplicant_Address');
+					$cust['CoApplicant_CompanyName']=$form->get('CoApplicant_CompanyName');
+					$cust['CoApplicant_Designation']=$form->get('CoApplicant_Designation');
+					$cust['CoApplicantCompanyAddress']=$form->get('CoAppCompanyAddress');
+					$cust['CoApplicant_PAN_No']=$form->get('CoApplicant_PAN_No');
+					$cust['CoApplicant_Contact_No']=$form->get('CoApplicant_Contact_No');
+					$cust['CoApplicant_Email_Id']=$form->get('CoApplicant_Email_Id');
+					// $cust['City']=$form->get('city');
 					$cust->save();
 					$customer=$cust->id;
 				}else{
@@ -100,7 +167,7 @@ class page_sales_direct extends Page{
 
 				$plot=$this->add('Model_Plot');
 				$plot->load($form->get('plot_id'));
-				$plot->sale(
+				$sales_object=$plot->sale(
 									$customer,
 									$form->get('agent'),
 									$form->get('rate_per_sq_unit'),
@@ -117,6 +184,13 @@ class page_sales_direct extends Page{
 									$form->get('emi_commission_to_agent'),
 									'DirectSold'
 										);
+
+				$sales_object['Name_Of_Nominee'] = $form->get('Name_Of_Nominee');
+				$sales_object['Relation_With_Applicant'] = $form->get('Relation_With_Applicant');
+				$sales_object['Nominee_PAN_NO'] = $form->get('Nominee_PAN_NO');
+				$sales_object['Nominee_Age'] = $form->get('Nominee_Age');
+				$sales_object['Nominee_Address'] = $form->get('Nominee_Address');
+				$sales_object->save();
 			}catch(Exception $e){
 					$form->api->db->rollback();
 					// $form->js()->univ()->errorMessage($e->getMessage())->execute();

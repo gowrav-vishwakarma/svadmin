@@ -21,9 +21,15 @@ class Model_Sale extends Model_Table{
 		$this->addField( 'down_payment_submitted' )->mandatory( "This Field is Required" );
 		$this->addField( 'sales_date' )->type('date')->defaultValue(date('Y-m-d'));
 		$this->addField( 'is_current' )->type('boolean')->defaultValue(true);
+		$this->addField( 'Name_Of_Nominee' )->mandatory( "This Field is Required" );
+		$this->addField( 'Relation_With_Applicant' )->mandatory( "This Field is Required" );
+		$this->addField( 'Nominee_PAN_NO' )->mandatory( "This Field is Required" );
+		$this->addField( 'Nominee_Age' )->mandatory( "This Field is Required" );
+		$this->addField( 'Nominee_Address' )->mandatory( "This Field is Required" );
 
 		$this->hasMany( 'Emi', 'sales_id' );
 		$this->hasMany( 'Deposite', 'sales_id' );
+		$this->hasMany( 'ChequeDetails', 'sales_id' );
 
 		$this->addExpression( "name" )->set( function ( $m, $q ) {
 				return $m->dsql()->expr( 'concat([plot]," ",[customer])' )

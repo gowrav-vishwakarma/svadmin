@@ -29,12 +29,12 @@ class Model_Emi extends Model_Table{
 			$customer = $this->ref( 'sales_id' )->ref( 'customer_id' );
 			$distributor = $customer->ref( 'Distributor' )->tryLoadAny();
 			if ( !$distributor->loaded() ) throw $this->exception( 'There is some concurrency in this plot sold. Status is EMI sold while no distributor is available for this plot' );
-			$i=0;
+			$i=1;
 			$distribute_array=explode( ",", DISTRIBUTE );
-			while ( $distributor['sponsor_id'] !=0 and $i <= 5 ) {
+			while ( $distributor['sponsor_id'] !=0 and $i <= count($distribute_array) ) {
 
 				$sponsor=$distributor->ref( 'sponsor_id' );
-				$sponsor[$distributor['inLeg'].'_Commission'] = $sponsor[$distributor['inLeg'].'_Commission'] + $distribute_array[$i];
+				$sponsor["Level_".$i."_Commission"] = $sponsor["Level_".$i."_Commission"] + $distribute_array[$i-1];
 				$sponsor->save();
 				$distributor = $sponsor;
 				$i++;

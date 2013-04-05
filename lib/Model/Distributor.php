@@ -8,8 +8,6 @@ class Model_Distributor extends Model_Table {
 		$this->hasOne('Customer','customer_id');
 		$customer=$this->join('xcustomer.id','customer_id');
 		$customer->addField('name');
-		$customer->addField('Address');
-		$customer->addField('City');
 		
 		$this->hasOne('Distributor','sponsor_id');
 		$this->hasOne('Distributor','introducer_id');
@@ -20,11 +18,19 @@ class Model_Distributor extends Model_Table {
 		$this->addField('legD_id')->defaultValue(0);
 
 		$this->addField('Introduction_Income')->defaultValue(0);
-		$this->addField('A_Commission')->defaultValue(0);
-		$this->addField('B_Commission')->defaultValue(0);
-		$this->addField('C_Commission')->defaultValue(0);
-		$this->addField('D_Commission')->defaultValue(0);
+		$this->addField('Level_1_Commission')->defaultValue(0);
+		$this->addField('Level_2_Commission')->defaultValue(0);
+		$this->addField('Level_3_Commission')->defaultValue(0);
+		$this->addField('Level_4_Commission')->defaultValue(0);
+		$this->addField('Level_5_Commission')->defaultValue(0);
+		$this->addField('Level_6_Commission')->defaultValue(0);
 
+		$this->addField('Level_1_Count')->defaultValue(0);
+		$this->addField('Level_2_Count')->defaultValue(0);
+		$this->addField('Level_3_Count')->defaultValue(0);
+		$this->addField('Level_4_Count')->defaultValue(0);
+		$this->addField('Level_5_Count')->defaultValue(0);
+		$this->addField('Level_6_Count')->defaultValue(0);
 		$this->addField('Path')->defaultValue(0);
 
 		$this->addExpression('inLeg')->set('RIGHT(Path,1)');
@@ -36,11 +42,19 @@ class Model_Distributor extends Model_Table {
 
 	}
 
-	function beforeSave(){
+	function beforeSave(){	
 		if(!$this->loaded()){
 			$this->memorize('is_new',true);
 			$sponsor=$this->ref('sponsor_id');
 			$this['Path'] = $sponsor['Path']. $this->recall('leg');
+			$distributor=$this;
+			for($i=1;$i<=6;$i++){
+				if($distributor['sponsor_id']==0) break;
+				$sponsor_count=$distributor->ref('sponsor_id');
+				$sponsor_count['Level_'.$i.'_Count'] = $sponsor_count['Level_'.$i.'_Count'] +1;
+				$sponsor_count->save();
+				$distributor = $sponsor_count;
+			}
 		}
 	}
 

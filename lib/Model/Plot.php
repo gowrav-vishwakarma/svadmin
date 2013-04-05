@@ -67,6 +67,8 @@ class Model_Plot extends Model_Table {
 
 		$this['status'] =$soldmethod;
 		$this->save();
+
+		return $sales;
 	}
 
 }
