@@ -50,13 +50,15 @@ class Model_Sale extends Model_Table{
 
 		$calculated_cost=$this['down_payment'];
 
+		$calculated_cost += $this['master_emi']* $this['no_of_master_emi'];
+
 		foreach ( explode( ';', $this['emi_pattern'] ) as $pattern ) {
 			$tmp=explode( "x", $pattern );
 			$calculated_cost += ( $tmp[0]*$tmp[1] );
 		}
 
 		if ( $this['total_cost'] != $calculated_cost )
-			throw $this->exception( "Total Cost is not Equal to calculated emi pattern ".$this['total_cost'] );
+			throw $this->exception( "Total Cost is not Equal to calculated emi pattern ".$this['total_cost']."calculated_cost" .$calculated_cost );
 	}
 
 	function create_emis( $emistartdate ) {
