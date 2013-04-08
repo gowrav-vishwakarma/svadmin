@@ -74,6 +74,7 @@ class Frontend extends ApiFrontend {
         $m->addMenuItem('marketing','Marketing System');
         $m->addMenuItem('reports','Reporting System');
         $m->addMenuItem('staff','Staff Management');
+        $m->addMenuItem('treeview','Tree View');
         $m->addMenuItem('logout');
           
         //$this->add('H1', null, 'logo')->set("BVMSSS");
