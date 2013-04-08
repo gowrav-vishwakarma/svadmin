@@ -47,7 +47,7 @@ class Model_Distributor extends Model_Table {
 			$this->memorize('is_new',true);
 			$sponsor=$this->ref('sponsor_id');
 			$this['Path'] = $sponsor['Path']. $this->recall('leg');
-			$distributor=$this;
+			$distributor=clone $this;
 			for($i=1;$i<=6;$i++){
 				if($distributor['sponsor_id']==0) break;
 				$sponsor_count=$distributor->ref('sponsor_id');
@@ -56,6 +56,8 @@ class Model_Distributor extends Model_Table {
 				$distributor = $sponsor_count;
 			}
 		}
+		// throw $this->exception('Hello '. $this['sponsor_id']);
+
 	}
 
 	function afterSave(){

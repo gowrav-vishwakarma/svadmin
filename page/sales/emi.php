@@ -167,8 +167,8 @@ class page_sales_emi extends Page{
 				$dist=$this->add('Model_Distributor');
 				// TODO check for existing username
 				$dist['name']=$form->get('customer_name');
-				$dist['sponsor_id']=$form->get('sponsor');
-				$dist['introducer_id']=$form->get('introducer');
+				$dist['sponsor_id']=$sponsor->id;
+				$dist['introducer_id']=$i_customer->id;
 				$dist->memorize('leg',$form->get('leg'));
 				$dist->save();
 				$customer = $dist->ref('customer_id');
