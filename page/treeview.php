@@ -13,13 +13,13 @@ class page_treeview extends Page {
         	if( !$wanted_id->loaded() /*OR strpos($wanted_id['Path'],$this->api->auth->model['Path']) === false*/){
         		// $e->set("The required Id is either not present or not in your down");
         		$showerror=true;
-	        	$tv->start_id = $this->api->auth->model->id;
+	        	$tv->start_id = 2;//$this->api->auth->model->id;
 	        }
         	else
 	        	$tv->start_id = $_GET['Start'];
         }
         else
-        	$tv->start_id = $this->api->auth->model->id;
+        	$tv->start_id = 2;//$this->api->auth->model->id;
 	
         if(!$showerror){
         	$e->js(true)->hide();
