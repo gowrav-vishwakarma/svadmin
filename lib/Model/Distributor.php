@@ -11,11 +11,15 @@ class Model_Distributor extends Model_Table {
 		
 		$this->hasOne('Distributor','sponsor_id');
 		$this->hasOne('Distributor','introducer_id');
+		$this->hasOne('Distributor','legA_id');
+		$this->hasOne('Distributor','legB_id');
+		$this->hasOne('Distributor','legC_id');
+		$this->hasOne('Distributor','legD_id');
 
-		$this->addField('legA_id')->defaultValue(0);
-		$this->addField('legB_id')->defaultValue(0);
-		$this->addField('legC_id')->defaultValue(0);
-		$this->addField('legD_id')->defaultValue(0);
+		// $this->addField('legA_id')->defaultValue(0);
+		// $this->addField('legB_id')->defaultValue(0);
+		// $this->addField('legC_id')->defaultValue(0);
+		// $this->addField('legD_id')->defaultValue(0);
 
 		$this->addField('Introduction_Income')->defaultValue(0);
 		$this->addField('Level_1_Commission')->defaultValue(0);
