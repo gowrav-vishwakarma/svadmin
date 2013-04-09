@@ -36,6 +36,11 @@ class Model_Distributor extends Model_Table {
 		$this->addField('Level_5_Count')->defaultValue(0);
 		$this->addField('Level_6_Count')->defaultValue(0);
 		$this->addField('Path')->defaultValue(0);
+		
+		$this->addField('Total_Amount')->defaultValue(0);
+		$this->addField('Service_Charge')->defaultValue(0);
+		$this->addField('TDS')->defaultValue(0);
+		$this->addField('Net_Amount')->defaultValue(0);
 
 		$this->addExpression('inLeg')->set('RIGHT(Path,1)');
 

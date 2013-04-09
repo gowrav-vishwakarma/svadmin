@@ -4,7 +4,8 @@ class page_marketing extends Page{
 		parent::init();
 
 		$tabs=$this->add('Tabs');
-		$tabs->addtabUrl('mrkt_payouts','Payouts');
+		$tabs->addtabUrl('plan_closing','Closing');
+		$tabs->addtabUrl('plan_payouts','Payouts');
 		$tabs->addtabUrl('mrkt_pins','Pin Management');
 	}
 }
