@@ -1,6 +1,8 @@
 <?php
 
 class Model_Closing extends Model_Table {
+	var $table='xclosing';
+
 	function init(){
 		parent::init();
 
@@ -17,6 +19,8 @@ class Model_Closing extends Model_Table {
 		$this->addField('Service_Charge');
 		$this->addField('TDS');
 		$this->addField('Net_Amount');
+
+		$this->addCondition('distributor_id' ,'<>',1);
 
 	}
 
@@ -54,6 +58,8 @@ class Model_Closing extends Model_Table {
 						Service_Charge,
 						TDS,
 						Net_Amount
+					FROM
+						xdistributors
 				)";
 		$this->query($q);
 
