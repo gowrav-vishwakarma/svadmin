@@ -8,17 +8,17 @@ class Model_Closing extends Model_Table {
 
 		$this->hasOne('Distributor','distributor_id');
 		$this->addField('name')->type('date');
-		$this->addField('Introduction_Amount');
-		$this->addField('Level_1_Amount');
-		$this->addField('Level_2_Amount');
-		$this->addField('Level_3_Amount');
-		$this->addField('Level_4_Amount');
-		$this->addField('Level_5_Amount');
-		$this->addField('Level_6_Amount');
-		$this->addField('Total_Amount');
-		$this->addField('Service_Charge');
+		$this->addField('Introduction_Amount')->caption('Intro');
+		$this->addField('Level_1_Amount')->caption('L1');
+		$this->addField('Level_2_Amount')->caption('L2');
+		$this->addField('Level_3_Amount')->caption('L3');
+		$this->addField('Level_4_Amount')->caption('L4');
+		$this->addField('Level_5_Amount')->caption('L5');
+		// $this->addField('Level_6_Amount')->caption('L6');
+		$this->addField('Total_Amount')->caption('Total');
+		$this->addField('Service_Charge')->system(true);
 		$this->addField('TDS');
-		$this->addField('Net_Amount');
+		$this->addField('Net_Amount')->caption('Net');
 
 		$this->addCondition('distributor_id' ,'<>',1);
 
@@ -87,4 +87,8 @@ class Model_Closing extends Model_Table {
         $this->api->db->dsql()->expr($q)->execute();
     }
 
+    function getLastClosingDate(){
+    	$temp=$this->add('Model_Closing');
+    	return $temp->dsql()->del('field')->field('name')->order('id','desc')->limit(1)->getOne();
+    }
 }

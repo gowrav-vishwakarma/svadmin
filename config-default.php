@@ -1,6 +1,7 @@
 <?php
 
 define('SALE','Sale');
+// Changed to 5 ob_get_level(oid)
 define('DISTRIBUTE','200,150,125,100,75');
 
 $config['atk']['base_path']='./atk4/';

@@ -109,7 +109,7 @@ class page_sales_direct extends Page{
 																	"Yearly"=>"Yearly"))
 																	->set($sales_policy['emi_mode']);
 
-		$form->addField('DatePicker','emi_start_date')->set(date("Y-m-d", strtotime(date('Y-m-d')." +1 month" )));
+		$form->addField('DatePicker','emi_start_date')->set(date('Y-m-d'));
 		
 		$form->addField('line','master_emi')->set($sales_policy['master_emi']);
 		

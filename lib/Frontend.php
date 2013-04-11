@@ -71,6 +71,7 @@ class Frontend extends ApiFrontend {
         $m->addMenuItem('index','Welcome');
         $m->addMenuItem('masters','Masters');
         $m->addMenuItem('sales','Sales');
+        $m->addMenuItem('deposits','Deposit Management');
         $m->addMenuItem('marketing','Marketing System');
         $m->addMenuItem('reports','Reporting System');
         $m->addMenuItem('staff','Staff Management');

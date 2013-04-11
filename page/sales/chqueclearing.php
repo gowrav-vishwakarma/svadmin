@@ -23,9 +23,8 @@ class page_sales_chqueclearing extends Page{
 		if($_GET['filter']){
 			switch($_GET['status']){
 				case "Cleared":
-					$cheque_details->where('Cleared_On','>=',$form->get('from_date'));
-					$cheque_details->where('Cleared_On','<',$form->get('to_date'));
-
+					if($_GET['from_date']) $cheque_details->where('Cleared_On','>=',$_GET['from_date']);
+					if($_GET['to_date']) $cheque_details->where('Cleared_On','<',$_GET['to_date']);
 					break;
 				case "UnCleared":
 					$grid->addColumn('expander','clear','Mark Clear');
@@ -71,9 +70,14 @@ class page_sales_chqueclearing extends Page{
 		if($form->isSubmitted()){
 			if($form->get('cheque_number') != $cheque_details['Cheque_No'])
 				$form->displayError('cheque_number',"This is a wrong cheque number submitted");
+			if($cheque_details['Cleared_On'] != null) 
+				$form->displayError('cheque_number','This cheque is already cleared');
+			
 			try{
 				$form->api->db->beginTransaction();
 				$cheque_details->ref('sales_id')->depositAmount( $cheque_details['Amount'], $form->get('cleared_date') , $cheque_details['For_Master_Emi'] );
+				$cheque_details['Cleared_On']= $form->get('cleared_date');
+				$cheque_details->save();
 			}catch(Exception $e){
 			$form->api->db->rollback();
 				// $form->js()->univ()->errorMessage($e->getMessage())->execute();

@@ -3,7 +3,7 @@
 class page_plan_payouts extends Page {
 	function init(){
 		parent::init();
-
+		$this->api->stickyGET('closing_name');
 		$c = $this->add('Model_Closing');
         $c_q = $c->dsql();
         $c_q->del('field')->field($c->dsql()->expr('DISTINCT(name) as name'))->order('id','desc');
@@ -24,7 +24,10 @@ class page_plan_payouts extends Page {
 		}else
 			$closing->addCondition('name','is', null);
 
+		$closing->addCondition('Total_Amount' , '>',0);
+
 		$grid = $this->add('Grid');
+		$grid->add('misc/Export');
 		$grid->setModel($closing);
 
 		if($form->isSubmitted()){

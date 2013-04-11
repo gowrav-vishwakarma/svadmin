@@ -93,7 +93,7 @@ class Model_Sale extends Model_Table{
 		}
 
 		$today=$emistartdate;
-		$nextDate = date( "Y-m-d", strtotime( date( "Y-m-d", strtotime( $today ) ) . $toAdd ) );
+		$nextDate = $today;//date( "Y-m-d", strtotime( date( "Y-m-d", strtotime( $today ) ) . $toAdd ) );
 		foreach ( explode( ';', $this['emi_pattern'] ) as $pattern ) {
 			$tmp=explode( 'x', $pattern );
 			for ( $i=1;$i<=$tmp[1];$i++ ) {
